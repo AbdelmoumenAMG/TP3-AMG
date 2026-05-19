@@ -188,6 +188,15 @@ public class Laboratoire
         return resultat;
     }
 
+    private Path trouverFichier(String nomFichier)
+    {
+        Path path = Paths.get("src/" + nomFichier);
+        if (Files.exists(path)) return path;
+        path = Paths.get(nomFichier);
+        if (Files.exists(path)) return path;
+        throw new RuntimeException("Fichier non trouvé : " + nomFichier);
+    }
+
     private ArrayList<Ingredient> chargerIngredients()
     {
         ingredients = new ArrayList<Ingredient>();
@@ -195,7 +204,7 @@ public class Laboratoire
 
         try
         {
-            Path path = Paths.get("src/ingredients.txt");
+            Path path = trouverFichier("ingredients.txt");
             lignesFichier = Files.readAllLines(path);
         } catch (IOException e) {
             throw new RuntimeException("Fichier non trouvé");
@@ -221,7 +230,7 @@ public class Laboratoire
 
         try
         {
-            Path path = Paths.get("src/recettes.txt");
+            Path path = trouverFichier("recettes.txt");
             lignesFichier = Files.readAllLines(path);
         } catch (IOException e) {
             throw new RuntimeException("Fichier non trouvé");
@@ -247,7 +256,7 @@ public class Laboratoire
     private void ajouterRecette(Recette recette)
     {
         String nouvelleRecette = recette.toString();
-        try(PrintWriter output = new PrintWriter(new FileWriter("src/recettes.txt",true)))
+        try(PrintWriter output = new PrintWriter(new FileWriter(trouverFichier("recettes.txt").toString(),true)))
         {
             output.printf("%s\r\n", nouvelleRecette);
         }

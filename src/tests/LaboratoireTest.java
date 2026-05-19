@@ -26,10 +26,17 @@ public class LaboratoireTest
     private Alchimiste alchimiste;
     private String contenuOriginalRecettes;
 
+    private Path trouverFichierRecettes()
+    {
+        Path p = Paths.get("src/recettes.txt");
+        if (Files.exists(p)) return p;
+        return Paths.get("recettes.txt");
+    }
+
     @BeforeEach
     void setUp() throws IOException
     {
-        contenuOriginalRecettes = new String(Files.readAllBytes(Paths.get("src/recettes.txt")));
+        contenuOriginalRecettes = new String(Files.readAllBytes(trouverFichierRecettes()));
         alchimiste = new Alchimiste("Etudiant", 5);
         laboratoire = new Laboratoire(alchimiste);
     }
@@ -37,7 +44,7 @@ public class LaboratoireTest
     @AfterEach
     void tearDown() throws IOException
     {
-        Files.write(Paths.get("src/recettes.txt"), contenuOriginalRecettes.getBytes());
+        Files.write(trouverFichierRecettes(), contenuOriginalRecettes.getBytes());
     }
 
     // --- Tests trouverIngredient ---
